@@ -39,7 +39,7 @@ class _λ(metaclass=_Metaλ):
     def __init__(self, fn, /, *args, **kwargs):
         """**Arguments:**
 
-        - `func`: the callable to partially apply
+        - `fn`: the callable to partially apply
         - `*args`: any positional arguments to apply.
         - `**kwargs`: any keyword arguments to apply.
         """
