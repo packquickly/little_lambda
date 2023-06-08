@@ -134,7 +134,3 @@ if TYPE_CHECKING:
     λ = Any
 else:
     λ = _λ
-
-
-def add(x, y):
-    return x + y
