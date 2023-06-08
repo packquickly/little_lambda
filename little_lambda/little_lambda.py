@@ -1,10 +1,6 @@
 import functools as ft
 from typing import Any, Callable, TYPE_CHECKING
-from jaxtyping import Array
 import operator
-import jax
-import jax.numpy as jnp
-import jax.tree_util as jtu
 
 
 class _Metaλ(type):
@@ -38,7 +34,7 @@ class _λ(metaclass=_Metaλ):
     !!! example
     ```python
     (λ + 2) = lamda x: x + 2
-    (λ * jnp.ones(182)) = lmabda x: x * jnp.ones(182)
+    (λ * 17) = lmabda x: x * 17
     ```
     """
 
@@ -78,22 +74,25 @@ class _λ(metaclass=_Metaλ):
     def __call__(self, *args, **kwargs):
         return self.λ(*args, **kwargs)
 
-    
+
 def _set_meta_binary(cls, name: str, op: Callable[[Any, Any], Any]) -> None:
-    def fn(cls, value):            
-        if isinstance(value, (bool, complex, float, int, jax.Array)):
+    def fn(cls, value):
+        if isinstance(value, (bool, complex, float, int)):
             return cls(lambda x: op(x, value))
-        else:                      
-            raise RuntimeError("Type of `value` not understood.") 
+        else:
+            raise RuntimeError("Type of `value` not understood.")
 
     fn.__name__ = name
     fn.__qualname__ = cls.__qualname__ + "." + name
     setattr(cls, name, fn)
 
+
 def _rev(op):
     def __rev(x, y):
         return op(y, x)
+
     return __rev
+
 
 for (name, op) in [
     ("__add__", operator.add),
@@ -136,36 +135,6 @@ if TYPE_CHECKING:
 else:
     λ = _λ
 
+
 def add(x, y):
     return x + y
-
-
-if __name__ == "__main__":
-    two_norm_lambda = lambda tree: jtu.tree_reduce(
-        add, jtu.tree_map(lambda x: jnp.sum(x**2), tree)
-    )
-    two_norm_λ = λ(jtu.tree_reduce, add) @ λ(jtu.tree_map, λ @ jnp.sum @ jnp.square)
-    ssa_lambda = lambda tree: jtu.tree_reduce(
-        add,
-        43
-        * jtu.tree_map(
-            lambda x: jnp.sum(jnp.square(jnp.sin(jnp.sqrt(jnp.abs(x))))), tree
-        ),
-    )
-    ssa_λ = (
-        λ(jtu.tree_reduce, add)
-        @ 43
-        @ λ(jtu.tree_map, λ @ jnp.sum @ jnp.square @ jnp.sin @ jnp.sqrt @ jnp.abs)
-    )
-    y = ({"a": (jnp.ones(3), 2 * jnp.ones(14))}, jnp.zeros(43))
-    vector = jnp.zeros(10,)
-    vec_λ = λ @ jnp.sum @ jnp.square @ (λ + 2)
-    two_lambda = two_norm_lambda(y)
-    two_λ = two_norm_λ(y)
-    ssa_lambda = ssa_lambda(y)
-    ssa_λ = ssa_λ(y)
-    print(f"vec_λ is {vec_λ(vector)}")
-    print(
-        f"lambda 2 norm: {two_lambda}, lambda ssa: {ssa_lambda}",
-        f"λ 2 norm ssa: {two_λ}, λ ssa: {ssa_λ}",
-    )
