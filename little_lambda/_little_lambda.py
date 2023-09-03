@@ -34,7 +34,7 @@ class _λ(metaclass=_Metaλ):
     !!! example
     ```python
     (λ + 2) = lamda x: x + 2
-    (λ * 17) = lmabda x: x * 17
+    (λ * 17) = lambda x: x * 17
     ```
     """
 
@@ -79,6 +79,10 @@ def _set_meta_binary(cls, name: str, op: Callable[[Any, Any], Any]) -> None:
     def fn(cls, value):
         if isinstance(value, (bool, complex, float, int)):
             return cls(lambda x: op(x, value))
+        if isinstance(value, _Metaλ):
+            if op == operator.eq:
+                # A bit of black magic to satisfy the gods.
+                return True
         else:
             raise RuntimeError("Type of `value` not understood.")
 
@@ -98,7 +102,6 @@ for (name, op) in [
     ("__add__", operator.add),
     ("__sub__", operator.sub),
     ("__mul__", operator.mul),
-    ("__matmul__", operator.matmul),
     ("__truediv__", operator.truediv),
     ("__floordiv__", operator.floordiv),
     ("__mod__", operator.mod),
@@ -111,7 +114,6 @@ for (name, op) in [
     ("__radd__", _rev(operator.add)),
     ("__rsub__", _rev(operator.sub)),
     ("__rmul__", _rev(operator.mul)),
-    ("__rmatmul__", _rev(operator.matmul)),
     ("__rtruediv__", _rev(operator.truediv)),
     ("__rfloordiv__", _rev(operator.floordiv)),
     ("__rmod__", _rev(operator.mod)),
