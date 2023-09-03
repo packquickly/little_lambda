@@ -23,13 +23,6 @@ class _λ(metaclass=_Metaλ):
     λ @ f @ g = lambda x: f(g(x))
     ```
 
-    λ will perform partial application when multiple arguments are supplied,
-    and supports addition of functions:
-    !!! example
-    ```python
-    λ(f, y) + g = lambda x: f(y, x) + g(x)
-    ```
-
     and can partially apply binary operations to constants:
     !!! example
     ```python
