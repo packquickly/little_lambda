@@ -2,24 +2,24 @@
 little λ is a tiny python utility for function composition!
 
 little λ supports a functional-like syntax for function composition by
-extending the `@` operator for composition of linear functions to
+extending the `@` operator used for linear function composition to
 nonlinear functions via the `λ` class.
 
 To use, simply put a little `λ` at the start of the functions
 you want to compose separated by composition operators `@`:
 
-'''python
+```python
 n_unique = λ @ len @ set
 n_unique([1, 1, 4, 5])
 # returns 3
-'''
+```
 
 The `λ` can also be used to generate simple lambda functions from
 most binary operations, which can themselves be composed:
 
-'''python
+```python
 is_even = (λ == 0) @ (λ % 2)
-'''
+```
 
 Note that the term `(λ == 0)` counts as a `λ` at the start of the
 composition.
@@ -37,7 +37,6 @@ Here, `λ(map, λ ** 2)` is the map function, partially applied with the square 
 little λ makes your functional Python code look the part!
 ```python
 sum_of_even_squares = λ @ sum @ λ(map, λ ** 2) @ λ(filter, (λ == 0) @ (λ % 2))
-  
 ```
 
 
