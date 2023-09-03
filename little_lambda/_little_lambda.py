@@ -61,16 +61,6 @@ class _λ(metaclass=_Metaλ):
 
         return λ(composition)
 
-    def __add__(self, other):
-        if isinstance(other, λ):
-
-            def summation(*args, **kwargs):  # pyright: ignore
-                return self.λ(*args, **kwargs) + other.λ(*args, **kwargs)
-
-        else:
-            raise RuntimeError("Type of `other` not understood.")
-        return λ(summation)
-
     def __call__(self, *args, **kwargs):
         return self.λ(*args, **kwargs)
 
