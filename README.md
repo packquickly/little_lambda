@@ -3,7 +3,7 @@ Little λ is a tiny python utility for function composition!
 
 Little λ supports a functional-like syntax for function composition by
 extending the `@` operator used for linear function composition to
-nonlinear functions via the `λ` class.
+nonlinear functions.
 
 To use, simply put a little `λ` at the start of the functions
 you want to compose separated by composition operators `@`:
@@ -24,8 +24,8 @@ is_even = (λ == 0) @ (λ % 2)
 Note that the term `(λ == 0)` counts as a `λ` at the start of the
 composition.
 
-Finally, Little `λ` can be used for partial application calling `λ` with the
-function in the first argument, and the arguments to apply in the following arguments:
+Finally, Little `λ` can be used for partial application via `λ(fn, *args, **kwargs)`.
+This makes it particularly easy to use `λ` with higher-order functions:
 
 ```python
 sum_of_squares = λ @ sum @ λ(map, λ ** 2)
